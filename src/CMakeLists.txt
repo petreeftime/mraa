@@ -1,4 +1,4 @@
-set (mraa_LIB_INCLUDE_DIRS
+et (mraa_LIB_INCLUDE_DIRS
   ${PROJECT_SOURCE_DIR}/api
   ${PROJECT_SOURCE_DIR}/api/mraa
   ${PROJECT_SOURCE_DIR}/include
@@ -45,6 +45,11 @@ endif()
 if (ARMPLAT)
   add_subdirectory(arm)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DARMPLAT=1")
+endif()
+
+if (MIPSPLAT)
+  add_subdirectory(mips)
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DMIPSPLAT=1")
 endif()
 
 if (USBPLAT)
