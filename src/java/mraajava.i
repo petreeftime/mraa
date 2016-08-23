@@ -56,8 +56,34 @@ class Spi;
 }
 }
 
-%ignore write(const char* data, int length);
-%ignore read(char* data, int length);
+%typemap(jni) (const char *data, int length) "jbyteArray";
+%typemap(jtype) (const char *data, int length) "byte[]";
+%typemap(jstype) (const char *data, int length) "byte[]";
+%typemap(javain) (const char *data, int len) "$javainput";
+
+%typemap(in) (const char *data, int length) {
+        $1 = (char *) JCALL2(GetByteArrayElements, jenv, $input, NULL);
+        $2 = JCALL1(GetArrayLength, jenv, $input);
+}
+
+%typemap(freearg) (const char *data, int length) {
+        JCALL3(ReleaseByteArrayElements, jenv, $input, (jbyte *)$1, JNI_ABORT);
+}
+
+%typemap(jni) (char *data, int length) "jbyteArray";
+%typemap(jtype) (char *data, int length) "byte[]";
+%typemap(jstype) (char *data, int length) "byte[]";
+%typemap(javain) (char *data, int len) "$javainput";
+
+%typemap(in) (char *data, int length) {
+        $1 = (char *) JCALL2(GetByteArrayElements, jenv, $input, NULL);
+        $2 = JCALL1(GetArrayLength, jenv, $input);
+}
+
+%typemap(freearg) (char *data, int length) {
+        JCALL3(ReleaseByteArrayElements, jenv, $input, (jbyte *)$1, 0);
+}
+
 %ignore globVM;
 %ignore env_key;
 %ignore mraa_java_isr_callback;
